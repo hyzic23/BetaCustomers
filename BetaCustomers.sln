@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetaCustomers.API", "BetaCustomers.API\BetaCustomers.API.csproj", "{F3655AA7-7167-41DD-8F58-31EBD9266FD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetaCustomers.UnitTests", "BetaCustomers.UnitTests\BetaCustomers.UnitTests.csproj", "{59BA2C88-44D5-47AC-8C56-1946F18B04F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3655AA7-7167-41DD-8F58-31EBD9266FD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3655AA7-7167-41DD-8F58-31EBD9266FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3655AA7-7167-41DD-8F58-31EBD9266FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3655AA7-7167-41DD-8F58-31EBD9266FD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59BA2C88-44D5-47AC-8C56-1946F18B04F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59BA2C88-44D5-47AC-8C56-1946F18B04F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59BA2C88-44D5-47AC-8C56-1946F18B04F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59BA2C88-44D5-47AC-8C56-1946F18B04F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
