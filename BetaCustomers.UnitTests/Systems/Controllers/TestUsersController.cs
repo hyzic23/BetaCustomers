@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BetaCustomers.API.Controllers;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
+using BetaCustomers.UnitTests.Fixtures;
 using Moq;
 
 namespace BetaCustomers.UnitTests.Systems.Controllers;
@@ -16,21 +17,7 @@ public class TestUsersController
         var mockUsersService = new Mock<IUsersService>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
-            .ReturnsAsync(new List<User>()
-            {
-                new User()
-                {
-                    Id = 1,
-                    Name = "Josh",
-                    Address = new Address()
-                    {
-                        Street = "123 Main Str",
-                        City = "WaterDown",
-                        ZipCode = "9098K1"
-                    },
-                    Email = "josh@gmail.com"
-                }
-            });
+            .ReturnsAsync(UsersFixture.GetTestUsers());
         
         var sut = new UsersController(mockUsersService.Object);
         
@@ -66,21 +53,7 @@ public class TestUsersController
         var mockUsersService = new Mock<IUsersService>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
-            .ReturnsAsync(new List<User>()
-            {
-                new User()
-                {
-                    Id = 1,
-                    Name = "Josh",
-                    Address = new Address()
-                    {
-                        Street = "123 Main Str",
-                        City = "WaterDown",
-                        ZipCode = "9098K1"
-                    },
-                    Email = "josh@gmail.com"
-                }
-            });
+            .ReturnsAsync(UsersFixture.GetTestUsers());
         
         var sut = new UsersController(mockUsersService.Object);
         
