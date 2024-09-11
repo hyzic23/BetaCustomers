@@ -5,16 +5,11 @@ namespace BetaCustomers.API.Services;
 
 public class PersonsService : IPersonsService
 {
-    // public PersonsService(List<Person> Persons)
-    // {
-    //     this.Persons = Persons;
-    // }
-    
     public PersonsService()
     {
     }
 
-    private List<Person> Persons = new List<Person>
+    private readonly List<Person> _persons = new()
     {
         new Person()
         {
@@ -35,26 +30,38 @@ public class PersonsService : IPersonsService
             LastName = "Talia Mark"
         }
     };
-    
-    
+
+
     public List<Person> LoadAll()
     {
-        return Persons;
+        return _persons;
     }
 
-    public void CreatePerson(Person person)
+    public Person CreatePerson(Person request)
     {
-        var persons = Persons[0];
-        Persons.Add(person);
+        var person = new Person()
+        {
+            Id = _persons.Max(per => per.Id) + 1,
+            FirstName = request.FirstName,
+            LastName = request.LastName
+        };
+        _persons.Add(person);
+        return person;
     }
 
-    public Person GetPersonById(int id)
+    public Person? GetPersonById(int id)
     {
-        throw new NotImplementedException();
+        var result = _persons.FirstOrDefault(person => person.Id == id);
+        return result;
     }
 
-    public void UpdatePerson()
+    public Person? UpdatePerson(Person person)
     {
-        throw new NotImplementedException();
+        var result = _persons.FirstOrDefault(x => x.Id == person.Id);
+        if (string.IsNullOrEmpty(result.FirstName)) return null;
+        result.Id = person.Id;
+        result.FirstName = person.FirstName;
+        result.LastName = person.LastName;
+        return result;
     }
 }

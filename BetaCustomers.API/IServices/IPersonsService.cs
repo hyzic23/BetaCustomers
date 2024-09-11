@@ -5,7 +5,7 @@ namespace BetaCustomers.API.IServices;
 public interface IPersonsService
 {
     List<Person> LoadAll();
-    void CreatePerson(Person person);
-    Person GetPersonById(int id);
-    void UpdatePerson();
+    Person CreatePerson(Person person);
+    Person? GetPersonById(int id);
+    Person? UpdatePerson(Person person);
 }
