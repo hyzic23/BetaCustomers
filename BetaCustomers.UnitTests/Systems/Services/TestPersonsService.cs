@@ -57,8 +57,8 @@ public class TestPersonsService
    {
       //Arrange
       var personId = 1;
-      var firstName = "John";
-      var lastName = "Doe";
+      var firstName = "John Doe";
+      var lastName = "Sarah Doe";
 
       var personDto = new Person
       {
@@ -76,5 +76,24 @@ public class TestPersonsService
 
       //Assert
       Assert.Equal(personId, person.Id);
+      Assert.Equal(firstName, person.FirstName);
    }
+   
+   [Fact]
+   public void GetPersonById_ShouldReturnNothing_WhenPersonDoesNotExists()
+   {
+      //Arrange
+      _personServiceMock
+         .Setup(x => x.GetPersonById(100))
+         .Returns(() => null);
+
+      //Act
+      var person = _sut.GetPersonById(100);
+
+      //Assert
+      Assert.Null(person);
+   }
+   
+   
+   
 }
