@@ -1,5 +1,6 @@
 using BetaCustomers.API.Config;
 using BetaCustomers.API.IServices;
+using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<MongoDbService>();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
