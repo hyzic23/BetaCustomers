@@ -1,5 +1,6 @@
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BetaCustomers.API.Controllers;
@@ -16,6 +17,7 @@ public class PlaylistController : ControllerBase
         _playlistService = playlistService;
     }
 
+    [Authorize]
     [HttpGet] 
     [Route("GetAllPlaylist")]
     public async Task<IActionResult> GetAllPlaylistAsync()
