@@ -58,13 +58,12 @@ public class LoginController : ControllerBase
             new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
             new Claim(ClaimTypes.Name, userInfo.Username),
         };
-
-        //TODO:
-        //Make AddDays(30) read from AppSettings configuration
+        
+        var tokenExpiryInMinutes = Double.Parse(_options.Value.ExpiryTimeInMinutes);
         var jwtToken = new JwtSecurityToken(
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddDays(30),
+            expires: DateTime.UtcNow.AddMinutes(tokenExpiryInMinutes),
             signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(
 
