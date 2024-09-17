@@ -29,6 +29,8 @@ public class PlaylistService : IPlaylistService
 
     public Task<Playlist> GetPlaylistByIdAsync(string id)
     {
+        //TODO:
+        //Flesh out this implementaion
         throw new NotImplementedException();
     }
 

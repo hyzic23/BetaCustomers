@@ -5,6 +5,7 @@ using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ ConfigureServices(builder.Services);
 
 // Add services to the container.
 
+//adding serilog as our default logger and telling
+//it to fetch the serilog configuration from appsettings.json
+builder.Host.UseSerilog((context, config) => 
+    config.ReadFrom.Configuration(context.Configuration));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +43,7 @@ builder.Services.AddAuthentication(cfg => {
     };
 });
 
+
 var app = builder.Build();
 app.MapHealthChecks("/health");
 
@@ -49,6 +55,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

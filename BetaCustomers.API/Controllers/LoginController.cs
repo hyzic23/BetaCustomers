@@ -16,18 +16,37 @@ public class LoginController : ControllerBase
 {
     private readonly string _secretKey;
     private readonly IOptions<UsersApiOptions> _options;
-    public LoginController(IOptions<UsersApiOptions> options)
+    private readonly ILogger<LoginController> _logger;
+    public LoginController(IOptions<UsersApiOptions> options, 
+                           ILogger<LoginController> logger)
     {
         _options = options;
         _secretKey = options.Value.SecretKey;
+        _logger = logger;
     }
-    
+
+    [AllowAnonymous]
+    [HttpGet]
+    [Route("loggers")]
+    public IActionResult Get()
+    {
+        _logger.LogInformation("User found successfully!");
+        _logger.LogWarning("User was not found in good condition!");
+        _logger.LogCritical("User is very critical");
+        _logger.LogError("I am sorry but the user is already dead!");
+        return Ok("Logs information successfully!");
+    }
+
     [AllowAnonymous]
     [HttpPost]
     [Route("token")]
-    public async Task<IActionResult> GenerateToken(UserModel login)
+    public async Task<IActionResult> GenerateToken(UserModel userModel)
     {
-        var user = AuthenticateUser(login);
+        if (userModel == null)
+        {
+            return BadRequest();
+        }
+        var user = AuthenticateUser(userModel);
         var token = await GenerateJwtTokens(user);
         return Ok(token);
     }
@@ -40,6 +59,8 @@ public class LoginController : ControllerBase
             new Claim(ClaimTypes.Name, userInfo.Username),
         };
 
+        //TODO:
+        //Make AddDays(30) read from AppSettings configuration
         var jwtToken = new JwtSecurityToken(
             claims: claims,
             notBefore: DateTime.UtcNow,
@@ -58,6 +79,10 @@ public class LoginController : ControllerBase
     //Method to authenticate user
     private static UserModel AuthenticateUser(UserModel login)
     {
+        //TODO
+        //Implement username, email to be dynamic
+        //by reading from database and removing the hardcoded values.
+        
         //Validate  User Credential
         //Demo Purpose with HardCoded values
         if (login.Username == "sys")
