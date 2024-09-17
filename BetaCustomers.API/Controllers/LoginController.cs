@@ -1,9 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BetaCustomers.API.Config;
 using BetaCustomers.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BetaCustomers.API.Controllers;
@@ -12,23 +14,25 @@ namespace BetaCustomers.API.Controllers;
 [Route("[controller]")]
 public class LoginController : ControllerBase
 {
-    //private readonly IConfiguration _configuration;
-    //private readonly IOptions<UsersApiOptions> _options;
-    // public LoginController(IConfiguration configuration)
-    // {
-    //     _configuration = configuration;
-    // }
+    private readonly string _secretKey;
+    private readonly IOptions<UsersApiOptions> _options;
+    public LoginController(IOptions<UsersApiOptions> options)
+    {
+        _options = options;
+        _secretKey = options.Value.SecretKey;
+    }
     
     [AllowAnonymous]
-    [HttpPost(Name = "Login")]
-    public async Task<IActionResult> Login(UserModel login)
+    [HttpPost]
+    [Route("token")]
+    public async Task<IActionResult> GenerateToken(UserModel login)
     {
         var user = AuthenticateUser(login);
         var token = await GenerateJwtTokens(user);
         return Ok(token);
     }
 
-    private static Task<string> GenerateJwtTokens(UserModel userInfo)
+    private Task<string> GenerateJwtTokens(UserModel userInfo)
     {
         var claims = new List<Claim>
         {
@@ -43,7 +47,7 @@ public class LoginController : ControllerBase
             signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(
 
-                    Encoding.UTF8.GetBytes("")),
+                    Encoding.UTF8.GetBytes(_secretKey)),
                 SecurityAlgorithms.HmacSha256Signature
             )
         );
@@ -51,8 +55,8 @@ public class LoginController : ControllerBase
     }
 
 
-    //Method to  authenticate user
-    private UserModel AuthenticateUser(UserModel login)
+    //Method to authenticate user
+    private static UserModel AuthenticateUser(UserModel login)
     {
         //Validate  User Credential
         //Demo Purpose with HardCoded values
@@ -60,7 +64,8 @@ public class LoginController : ControllerBase
         {
             var user = new UserModel
             {
-                Username = "Sys Admin",
+                Id = login.Id,
+                Username = "sys",
                 Email = "sys.admin@imodetechnologies.com"
             };
             return user;

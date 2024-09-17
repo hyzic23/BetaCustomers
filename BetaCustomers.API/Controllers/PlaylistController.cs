@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BetaCustomers.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class PlaylistController : ControllerBase
@@ -16,8 +17,7 @@ public class PlaylistController : ControllerBase
     {
         _playlistService = playlistService;
     }
-
-    [Authorize]
+    
     [HttpGet] 
     [Route("GetAllPlaylist")]
     public async Task<IActionResult> GetAllPlaylistAsync()
