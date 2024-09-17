@@ -30,6 +30,14 @@ public class PlaylistController : ControllerBase
         return NotFound();
     }
     
+    [HttpGet] 
+    [Route("GetPlaylistById/{id}")]
+    public async Task<IActionResult> GetPlaylistByIdAsync(string id)
+    {
+        var playlist = await _playlistService.GetPlaylistByIdAsync(id);
+        return Ok(playlist);
+    }
+    
     [HttpPost]
     [Route("Create")]
     public async Task<IActionResult> Create(Playlist playlist)

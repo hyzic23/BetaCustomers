@@ -27,11 +27,10 @@ public class PlaylistService : IPlaylistService
         return await _playlistCollection.Find(new BsonDocument()).ToListAsync();
     }
 
-    public Task<Playlist> GetPlaylistByIdAsync(string id)
+    public async Task<Playlist> GetPlaylistByIdAsync(string id)
     {
-        //TODO:
-        //Flesh out this implementaion
-        throw new NotImplementedException();
+        var playlist = await _playlistCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        return playlist;
     }
 
     public async Task AddToPlaylistAsync(string id, string movieId)
