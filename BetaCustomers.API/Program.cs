@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using BetaCustomers.API.Config;
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
@@ -43,6 +44,18 @@ builder.Services.AddAuthentication(cfg => {
     };
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter("global", _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 100,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        }));
+});
+
 
 var app = builder.Build();
 app.MapHealthChecks("/health");
@@ -56,6 +69,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseSerilogRequestLogging();
+app.UseRateLimiter();
 
 app.UseHttpsRedirection();
 
