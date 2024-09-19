@@ -27,6 +27,18 @@ public class UsersController : ControllerBase
         return NotFound();
     }
     
+    [HttpGet]
+    [Route("/")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userService.GetUsers();
+        if (users.Any())
+        {
+            return Ok(users);
+        }
+        return NotFound();
+    }
+    
     [HttpPost]
     [Route("CreateUser")]
     public async Task<IActionResult> CreateUser(UserModel user)
@@ -35,6 +47,18 @@ public class UsersController : ControllerBase
         // Add user validations
         var users = await _userService.CreateUser(user);
         return Ok(users);
+    }
+    
+    [HttpGet]
+    [Route("GetUserById/{id}")]
+    public async Task<IActionResult> Get(string id)
+    {
+        var user = await _userService.GetUserById(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
     }
     
 }
