@@ -22,7 +22,7 @@ public class TestUsersService
         
         var endpoint = "https://example.com/users";
         var config = Options.Create(
-            new UsersApiOptions
+            new UsersApiConfig
             {
                 Endpoint = endpoint
             });
@@ -52,7 +52,7 @@ public class TestUsersService
         
         var endpoint = "https://example.com/users";
         var config = Options.Create(
-            new UsersApiOptions
+            new UsersApiConfig
             {
                 Endpoint = endpoint
             });
@@ -75,7 +75,7 @@ public class TestUsersService
         
         var endpoint = "https://example.com/users";
         var config = Options.Create(
-            new UsersApiOptions
+            new UsersApiConfig
             {
                 Endpoint = endpoint
             });
@@ -99,7 +99,7 @@ public class TestUsersService
         
         var endpoint = "https://example.com/users";
         var config = Options.Create(
-            new UsersApiOptions
+            new UsersApiConfig
             {
                 Endpoint = endpoint
             });
@@ -125,7 +125,7 @@ public class TestUsersService
         var httpClient = new HttpClient(handlerMock.Object);
 
         var config = Options.Create(
-            new UsersApiOptions
+            new UsersApiConfig
             {
                 Endpoint = endpoint
             });

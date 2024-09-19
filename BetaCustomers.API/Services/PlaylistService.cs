@@ -1,7 +1,5 @@
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
