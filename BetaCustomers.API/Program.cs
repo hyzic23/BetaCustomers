@@ -2,6 +2,7 @@ using System.Text;
 using System.Threading.RateLimiting;
 using BetaCustomers.API.Config;
 using BetaCustomers.API.IServices;
+using BetaCustomers.API.Middleware;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,6 +68,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<RequestLoggerMiddleware>();
 app.UseAuthentication();
 app.UseSerilogRequestLogging();
 app.UseRateLimiter();
