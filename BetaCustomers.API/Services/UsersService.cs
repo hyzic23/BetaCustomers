@@ -13,10 +13,10 @@ public interface IUsersService
 public class UsersService : IUsersService
 {
     private readonly HttpClient _httpClient;
-    private readonly UsersApiOptions _apiConfig;
+    private readonly UsersApiConfig _apiConfig;
     
     public UsersService(HttpClient httpClient,
-        IOptions<UsersApiOptions> apiConfig)
+        IOptions<UsersApiConfig> apiConfig)
     {
         _httpClient = httpClient;
         _apiConfig = apiConfig.Value;

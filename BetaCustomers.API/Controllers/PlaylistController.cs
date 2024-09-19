@@ -53,11 +53,17 @@ public class PlaylistController : ControllerBase
         await _playlistService.AddToPlaylistAsync(id, movieId);
         return NoContent();
     }
-
+    
     [HttpDelete]
     [Route("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
+        var existingPlaylist = _playlistService.GetPlaylistByIdAsync(id);
+        if (existingPlaylist == null)
+        {
+            return NotFound();
+        }
+
         await _playlistService.DeleteAsync(id);
         return NoContent();
     }

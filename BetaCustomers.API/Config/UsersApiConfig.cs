@@ -1,6 +1,6 @@
 namespace BetaCustomers.API.Config;
 
-public class UsersApiOptions
+public class UsersApiConfig
 {
     public string Endpoint { get; set; }
     public string SecretKey { get; set; }

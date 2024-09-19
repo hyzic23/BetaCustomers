@@ -22,8 +22,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<MongoDbService>();
+builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddAuthentication(cfg => {
@@ -81,7 +81,7 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.Configure<UsersApiOptions>(builder.Configuration.GetSection("UsersApiOptions"));
+    services.Configure<UsersApiConfig>(builder.Configuration.GetSection("UsersApiOptions"));
     services.AddTransient<IUsersService, UsersService>();
     services.AddHttpClient<IUsersService, UsersService>();
     services.AddTransient<IPersonsService, PersonsService>();

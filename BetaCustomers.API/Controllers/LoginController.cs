@@ -15,9 +15,9 @@ namespace BetaCustomers.API.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly string _secretKey;
-    private readonly IOptions<UsersApiOptions> _options;
+    private readonly IOptions<UsersApiConfig> _options;
     private readonly ILogger<LoginController> _logger;
-    public LoginController(IOptions<UsersApiOptions> options, 
+    public LoginController(IOptions<UsersApiConfig> options, 
                            ILogger<LoginController> logger)
     {
         _options = options;
