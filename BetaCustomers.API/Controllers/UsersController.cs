@@ -16,7 +16,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet(Name = "GetUsers")]
+    [HttpGet(Name = "users")]
     public async Task<IActionResult> Get()
     {
         var users = await _userService.GetAllUsers();
@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
     }
     
     [HttpPost]
-    [Route("CreateUser")]
+    [Route("create")]
     public async Task<IActionResult> CreateUser(UserModel user)
     {
         // Todo
@@ -50,7 +50,7 @@ public class UsersController : ControllerBase
     }
     
     [HttpGet]
-    [Route("GetUserById/{id}")]
+    [Route("get-user/{id}")]
     public async Task<IActionResult> Get(string id)
     {
         var user = await _userService.GetUserById(id);
@@ -60,5 +60,31 @@ public class UsersController : ControllerBase
         }
         return Ok(user);
     }
+
+    [HttpPut]
+    [Route("update")]
+    public async Task<IActionResult> Update(UserModel user)
+    {
+        var userFound = await _userService.GetUserById(user.Id);
+        if (userFound == null)
+        {
+            return NotFound();
+        }
+        var updatedUser = _userService.UpdateUser(userFound.Id, userFound);
+        return Ok(updatedUser);
+    }
     
+    [HttpDelete]
+    [Route("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var userFound = await _userService.GetUserById(id);
+        if (userFound == null)
+        {
+            return NotFound();
+        }
+        var deleteUser = _userService.DeleteUser(userFound.Id);
+        return Ok(deleteUser);
+    }
+
 }
