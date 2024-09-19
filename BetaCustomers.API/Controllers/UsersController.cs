@@ -1,4 +1,5 @@
-using BetaCustomers.API.Services;
+using BetaCustomers.API.IServices;
+using BetaCustomers.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BetaCustomers.API.Controllers;
@@ -23,9 +24,17 @@ public class UsersController : ControllerBase
         {
             return Ok(users);
         }
-        
         return NotFound();
-
-        
     }
+    
+    [HttpPost]
+    [Route("CreateUser")]
+    public async Task<IActionResult> CreateUser(UserModel user)
+    {
+        // Todo
+        // Add user validations
+        var users = await _userService.CreateUser(user);
+        return Ok(users);
+    }
+    
 }

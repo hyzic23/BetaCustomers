@@ -10,7 +10,6 @@ namespace BetaCustomers.API.Controllers;
 [Route("[controller]")]
 public class PlaylistController : ControllerBase
 {
-    //private readonly MongoDbService _mongoDbService;
     private readonly IPlaylistService _playlistService;
 
     public PlaylistController(IPlaylistService playlistService)

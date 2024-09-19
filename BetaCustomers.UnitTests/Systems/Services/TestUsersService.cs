@@ -20,14 +20,22 @@ public class TestUsersService
         var handlerMock = MockHttpMessageHandler<User>.SetupBasicGetResourceList(expectedResponse);
         var httpClient = new HttpClient(handlerMock.Object);
         
+        //IOptions<MongoDbConfig> mongoDbConfig
+        
         var endpoint = "https://example.com/users";
         var config = Options.Create(
             new UsersApiConfig
             {
                 Endpoint = endpoint
             });
+
+        var mongoDbConfig = Options.Create(
+            new MongoDbConfig
+            {
+                
+            });
         
-        var sut = new UsersService(httpClient, config);
+        var sut = new UsersService(httpClient, config, mongoDbConfig);
         
         //Act
         await sut.GetAllUsers();
@@ -56,8 +64,13 @@ public class TestUsersService
             {
                 Endpoint = endpoint
             });
+        var mongoDbConfig = Options.Create(
+            new MongoDbConfig
+            {
+                
+            });
         
-        var sut = new UsersService(httpClient, config);
+        var sut = new UsersService(httpClient, config, mongoDbConfig);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -79,8 +92,13 @@ public class TestUsersService
             {
                 Endpoint = endpoint
             });
+        var mongoDbConfig = Options.Create(
+            new MongoDbConfig
+            {
+                
+            });
         
-        var sut = new UsersService(httpClient, config);
+        var sut = new UsersService(httpClient, config, mongoDbConfig);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -103,8 +121,13 @@ public class TestUsersService
             {
                 Endpoint = endpoint
             });
+        var mongoDbConfig = Options.Create(
+            new MongoDbConfig
+            {
+                
+            });
         
-        var sut = new UsersService(httpClient, config);
+        var sut = new UsersService(httpClient, config, mongoDbConfig);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -129,8 +152,13 @@ public class TestUsersService
             {
                 Endpoint = endpoint
             });
+        var mongoDbConfig = Options.Create(
+            new MongoDbConfig
+            {
+                
+            });
         
-        var sut = new UsersService(httpClient, config);
+        var sut = new UsersService(httpClient, config, mongoDbConfig);
         
         //Act
         var result = await sut.GetAllUsers();

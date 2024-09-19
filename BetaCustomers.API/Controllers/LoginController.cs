@@ -90,6 +90,9 @@ public class LoginController : ControllerBase
             {
                 Id = login.Id,
                 Username = "sys",
+                Password = "sys",
+                FirstName = "System",
+                LastName = "Administrator",
                 Email = "sys.admin@imodetechnologies.com"
             };
             return user;

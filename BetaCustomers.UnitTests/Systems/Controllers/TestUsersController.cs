@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using BetaCustomers.API.Controllers;
 using BetaCustomers.API.Models;
-using BetaCustomers.API.Services;
+using BetaCustomers.API.IServices;
 using BetaCustomers.UnitTests.Fixtures;
 using Moq;
 
