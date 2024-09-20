@@ -25,7 +25,6 @@ public class UsersService : IUsersService
 
     public async Task<UserModel> CreateUser(UserModel user)
     {
-        //var objectId = ObjectId.Parse(user.Id);
         await _context.UserCollections.InsertOneAsync(user);
         return user;
     }
@@ -58,6 +57,15 @@ public class UsersService : IUsersService
     {
         var filter = Builders<UserModel>.Filter.Eq("Id", id);
         await _context.UserCollections.DeleteOneAsync(filter);
+    }
+
+    public async Task<UserModel> CheckIfUserExist(string username)
+    {
+        var user = _context
+            .UserCollections
+            .Find(x => x.Username == username)
+            .FirstOrDefault();
+        return user;
     }
 
     public async Task<List<User>>  GetAllUsers()

@@ -4,5 +4,5 @@ namespace BetaCustomers.API.IServices;
 
 public interface IAuthenticateService
 {
-    BaseResponse AuthenticateUser(AuthenticateRequest request);
+    Task<BaseResponse> AuthenticateUser(AuthenticateRequest request);
 }

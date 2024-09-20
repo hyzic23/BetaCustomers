@@ -6,4 +6,5 @@ public class MongoDbConfig
     public string DatabaseName { get; set; } = null;
     public string PlaylistCollectionName { get; set; } = null;
     public string UserCollectionName { get; set; } = null;
+    public string LoginDetailsCollectionName { get; set; } = null;
 }
