@@ -1,29 +1,30 @@
-
 namespace BetaCustomers.API.Models;
 
 public class BaseResponse
 {
-    public BaseResponse(bool isSuccess, string? statusCode, string message)
-    {
-        IsSuccess = isSuccess;
-        StatusCode = statusCode;
-        Message = message;
-    }
+    public int StatusCode { get; set; }
+    public MessageDTO Message { get; set; }
     
-    public BaseResponse(bool isSuccess, string message)
-    {
-        IsSuccess = isSuccess;
-        Message = message;
-    }
-    
+    // Default Constructor
     public BaseResponse()
     {
-        IsSuccess = true;
-        StatusCode = string.Empty;
-        Message = string.Empty;
     }
+    
+    // Constructor with status code and message
+    public BaseResponse(int  statusCode, MessageDTO message)
+    {
+        StatusCode = statusCode;
+        Message = message;;
+    }
+}
 
-    public bool IsSuccess { get; set; }
-    public string? StatusCode { get; set; }
+public class MessageDTO
+{
     public string Message { get; set; }
+    
+    // Constructor
+    public MessageDTO(string message)
+    {
+        Message = message;
+    }
 }

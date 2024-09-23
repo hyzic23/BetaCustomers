@@ -18,11 +18,12 @@ public class AuthenticateService : IAuthenticateService
 
     public async Task<BaseResponse> AuthenticateUser(AuthenticateRequest request)
     {
-        // Check if user exists
+        // Todo :
+        // Change this to check for username and password
         var user = await _usersService.CheckIfUserExist(request.Username);
         if (user == null)
         {
-            return new BaseResponse(false, "Invalid username or password");
+            return new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO("Invalid username or password"));
         }
         
         // Generate JWT
@@ -45,6 +46,6 @@ public class AuthenticateService : IAuthenticateService
             loginDetails.Token = jwt;
         }
         await _loginService.CreateLoginDetails(loginDetails);
-        return new BaseResponse(true, "200", jwt);
+        return new BaseResponse(StatusCodes.Status201Created, new MessageDTO(jwt));
     }
 }
