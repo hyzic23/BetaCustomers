@@ -23,7 +23,8 @@ public class AuthenticateService : IAuthenticateService
         var user = await _usersService.CheckIfUserExist(request.Username);
         if (user == null)
         {
-            return new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO("Invalid username or password"));
+            var error = new { Error = "Unauthorized", Reason = "Invalid username or password" };
+            return new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO(error));
         }
         
         // Generate JWT
@@ -46,6 +47,6 @@ public class AuthenticateService : IAuthenticateService
             loginDetails.Token = jwt;
         }
         await _loginService.CreateLoginDetails(loginDetails);
-        return new BaseResponse(StatusCodes.Status201Created, new MessageDTO(jwt));
+        return new BaseResponse(StatusCodes.Status201Created, new MessageDTO(loginDetails));
     }
 }
