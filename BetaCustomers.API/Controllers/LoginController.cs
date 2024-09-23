@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using BetaCustomers.API.Config;
 using BetaCustomers.API.Models;
+using BetaCustomers.API.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -40,22 +41,34 @@ public class LoginController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     [Route("token")]
-    public async Task<IActionResult> GenerateToken(UserModel userModel)
+    //public async Task<IActionResult> GenerateToken(UserModel userModel)
+    public IActionResult GenerateToken(UserModel userModel)
     {
         if (userModel == null)
         {
             return BadRequest();
         }
         var user = AuthenticateUser(userModel);
-        var token = await GenerateJwtTokens(user);
+        var token = JwtUtils.GenerateJwtToken(user);
+        //var token = await GenerateJwtTokens(user);
         return Ok(token);
+    }
+    
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("validate")]
+    public IActionResult TokenValidation(JwtToken request)
+    {
+        //var isValid =  ValidateJwtToken(request.Token);
+        var isValid =  JwtUtils.ValidateJwtToken(request.Token);
+        return Ok(isValid);
     }
 
     private Task<string> GenerateJwtTokens(UserModel userInfo)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+            //new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
             new Claim(ClaimTypes.Name, userInfo.Username),
         };
         
@@ -66,12 +79,42 @@ public class LoginController : ControllerBase
             expires: DateTime.UtcNow.AddMinutes(tokenExpiryInMinutes),
             signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(
-
                     Encoding.UTF8.GetBytes(_secretKey)),
                 SecurityAlgorithms.HmacSha256Signature
             )
         );
         return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(jwtToken));
+    }
+    
+    //Validate Generated Token
+    private bool ValidateJwtToken(string jwt)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_secretKey);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validateToken);
+            var validateJwt = (JwtSecurityToken)validateToken;
+
+            // get claims
+            var userId = validateJwt.Claims.First(claim => claim.Type == "user_id").Value;
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
 
@@ -98,5 +141,14 @@ public class LoginController : ControllerBase
             return user;
         }
         return null!;
+    }
+    
+    
+    //Delete this after Test
+    // Todo
+    // Please delete this
+    public class JwtToken
+    {
+        public string Token { get; set; } = null;
     }
 }

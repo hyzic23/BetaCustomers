@@ -6,8 +6,8 @@ namespace BetaCustomers.API.Services;
 
 public class AuthenticateService : IAuthenticateService
 {
-    private IUsersService _usersService;
-    private ILoginService _loginService;
+    private readonly IUsersService _usersService;
+    private readonly ILoginService _loginService;
 
     public AuthenticateService(IUsersService usersService, 
                                ILoginService loginService)
@@ -31,17 +31,20 @@ public class AuthenticateService : IAuthenticateService
         // Save token in login details
         var loginDetails = await _loginService.GetLoginDetails(user.Username);
 
-        if (loginDetails == null)
+        if (string.IsNullOrEmpty(loginDetails.Username))
         {
-            loginDetails = new LoginDetail();
-            loginDetails.UserId = user.Username;
-            loginDetails.Token = jwt;
+            loginDetails = new LoginDetail
+            {
+                Username = user.Username,
+                Token = jwt,
+                CreatedAt = DateTime.UtcNow
+            };
         }
         else
         {
             loginDetails.Token = jwt;
         }
         await _loginService.CreateLoginDetails(loginDetails);
-        return new BaseResponse(true, jwt);
+        return new BaseResponse(true, "200", jwt);
     }
 }

@@ -20,12 +20,12 @@ public class LoginService : ILoginService
         return loginDetail;
     }
 
-    public async Task<LoginDetail> GetLoginDetails(string userId)
+    public async Task<LoginDetail> GetLoginDetails(string username)
     {
         var loginDetails = await _context
             .LoginDetailCollections
-            .Find(x => x.UserId == userId)
-            .FirstOrDefaultAsync();
+            .Find(x => x.Username == username)
+            .FirstOrDefaultAsync() ?? new LoginDetail();
         return loginDetails;
     }
 }

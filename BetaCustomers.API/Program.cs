@@ -88,4 +88,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddHttpClient<IUsersService, UsersService>();
     services.AddTransient<IPersonsService, PersonsService>();
     services.AddTransient<IPlaylistService, PlaylistService>();
+    services.AddTransient<ILoginService, LoginService>();
+    services.AddTransient<IAuthenticateService, AuthenticateService>();
 }
