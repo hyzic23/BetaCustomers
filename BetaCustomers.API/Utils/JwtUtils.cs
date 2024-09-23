@@ -49,7 +49,7 @@ public class JwtUtils
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero   // this is added to invalidate the token exactly on the given expiration time 
             };
             
             tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validateToken);

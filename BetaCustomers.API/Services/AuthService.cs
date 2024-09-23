@@ -4,12 +4,12 @@ using BetaCustomers.API.Utils;
 
 namespace BetaCustomers.API.Services;
 
-public class AuthenticateService : IAuthenticateService
+public class AuthService : IAuthService
 {
     private readonly IUsersService _usersService;
     private readonly ILoginService _loginService;
 
-    public AuthenticateService(IUsersService usersService, 
+    public AuthService(IUsersService usersService, 
                                ILoginService loginService)
     {
         _usersService = usersService;

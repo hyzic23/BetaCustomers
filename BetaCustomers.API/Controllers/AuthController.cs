@@ -7,11 +7,11 @@ namespace BetaCustomers.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthenticateController : ControllerBase
+public class AuthController : ControllerBase
 {
-    private readonly IAuthenticateService _authService;
+    private readonly IAuthService _authService;
 
-    public AuthenticateController(IAuthenticateService authService)
+    public AuthController(IAuthService authService)
     {
         _authService = authService;
     }

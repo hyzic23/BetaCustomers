@@ -2,7 +2,7 @@ using BetaCustomers.API.Models;
 
 namespace BetaCustomers.API.IServices;
 
-public interface IAuthenticateService
+public interface IAuthService
 {
     Task<BaseResponse> AuthenticateUser(AuthenticateRequest request);
 }
