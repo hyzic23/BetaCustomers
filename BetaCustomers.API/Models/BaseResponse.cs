@@ -4,7 +4,6 @@ public class BaseResponse
 {
     public int StatusCode { get; set; }
     public object Message { get; set; }
-    //public MessageDTO Message { get; set; }
     
     // Default Constructor
     public BaseResponse()
