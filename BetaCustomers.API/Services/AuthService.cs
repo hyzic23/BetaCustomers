@@ -41,12 +41,14 @@ public class AuthService : IAuthService
                 Token = jwt,
                 CreatedAt = DateTime.UtcNow
             };
+            await _loginService.CreateLoginDetails(loginDetails);
         }
         else
         {
             loginDetails.Token = jwt;
+            await _loginService.UpdateLoginDetails(loginDetails.Id, loginDetails);
         }
-        await _loginService.CreateLoginDetails(loginDetails);
+        //await _loginService.CreateLoginDetails(loginDetails);
         return new BaseResponse(StatusCodes.Status201Created, new MessageDTO(loginDetails));
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BetaCustomers.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost]
-    [Route("authenticate-user")]
+    [Route("authenticate")]
     public async Task<IActionResult> GenerateToken(AuthenticateRequest authUser)
     {
         var token = await _authService.AuthenticateUser(authUser);

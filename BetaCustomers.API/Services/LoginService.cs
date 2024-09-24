@@ -28,4 +28,10 @@ public class LoginService : ILoginService
             .FirstOrDefaultAsync() ?? new LoginDetail();
         return loginDetails;
     }
+
+    public async Task<ReplaceOneResult> UpdateLoginDetails(string id, LoginDetail loginDetail)
+    {
+        return await _context.LoginDetailCollections
+            .ReplaceOneAsync(x => x.Id == id, loginDetail);
+    }
 }
