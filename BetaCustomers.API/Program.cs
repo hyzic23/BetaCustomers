@@ -70,6 +70,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseJwtMiddleware();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<RequestLoggerMiddleware>();
 app.UseAuthentication();
 app.UseSerilogRequestLogging();
