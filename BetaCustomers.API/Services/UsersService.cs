@@ -68,6 +68,15 @@ public class UsersService : IUsersService
         return user;
     }
 
+    public async Task<UserModel> ValidateUserCredential(string username, string password)
+    {
+        var user = await _context
+            .UserCollections
+            .Find(x => x.Username == username && x.Password == password)
+            .FirstOrDefaultAsync();
+        return user;
+    }
+
     public async Task<List<User>>  GetAllUsers()
     {
         var usersResponse = await _httpClient.GetAsync(_apiConfig.Endpoint);

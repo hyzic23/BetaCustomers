@@ -47,6 +47,14 @@ public interface IUsersService
     Task<UserModel> CheckIfUserExist(string username);
     
     ///  <summary>
+    ///  Method is used to validate user's credential
+    ///  </summary>
+    ///  <param name="username"></param>
+    ///  <param name="password"></param>
+    ///  <returns>UserModel</returns>
+    Task<UserModel> ValidateUserCredential(string username, string password);
+    
+    ///  <summary>
     ///  Method is used for test purpose to fetch all users
     ///  </summary>
     ///  <returns></returns>
