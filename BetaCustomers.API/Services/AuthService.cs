@@ -26,7 +26,7 @@ public class AuthService : IAuthService
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation("CancellationToken was initiated");
+                _logger.LogInformation("CancellationToken was initiated and Authenticate User Task Cancelled!");
                 cancellationToken.ThrowIfCancellationRequested();
             }
             else
