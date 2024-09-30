@@ -8,6 +8,7 @@ public interface IAuthService
     ///  Method is used to Authenticate request 
     ///  </summary>
     ///  <param name="request"></param>
+    ///  <param name="cancellationToken"></param>
     ///  <returns>BaseResponse</returns>
-    Task<BaseResponse> AuthenticateUser(AuthenticateRequest request);
+    Task<BaseResponse> AuthenticateUser(AuthenticateRequest request, CancellationToken cancellationToken);
 }

@@ -19,9 +19,9 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     [Route("authenticate")]
-    public async Task<IActionResult> GenerateToken(AuthenticateRequest authUser)
+    public async Task<IActionResult> GenerateToken(AuthenticateRequest authUser, CancellationToken cancellationToken)
     {
-        var token = await _authService.AuthenticateUser(authUser);
+        var token = await _authService.AuthenticateUser(authUser, cancellationToken);
         return Ok(token);
     }
 }
