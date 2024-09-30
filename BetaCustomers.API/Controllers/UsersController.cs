@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace BetaCustomers.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    //private readonly ILogger<UsersController> _logger;
     private readonly IUsersService _userService;
 
     public UsersController(IUsersService userService)
@@ -16,7 +15,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet(Name = "users")]
+    [HttpGet(Name = "users-test")]
     public async Task<IActionResult> Get()
     {
         var users = await _userService.GetAllUsers();
@@ -28,10 +27,10 @@ public class UsersController : ControllerBase
     }
     
     [HttpGet]
-    [Route("/")]
-    public async Task<IActionResult> GetAllUsers()
+    [Route("users")]
+    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var users = await _userService.GetUsers();
+        var users = await _userService.GetUsers(cancellationToken);
         if (users.Any())
         {
             return Ok(users);

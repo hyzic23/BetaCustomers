@@ -12,15 +12,18 @@ public class UsersService : IUsersService
     private readonly MongoDbContext _context;
     private readonly HttpClient _httpClient;
     private readonly UsersApiConfig _apiConfig;
+    private ILogger<UsersService> _logger;
     
     public UsersService(HttpClient httpClient,
                         IOptions<UsersApiConfig> apiConfig,
-                        IOptions<MongoDbConfig> mongoDbConfig
+                        IOptions<MongoDbConfig> mongoDbConfig,
+                        ILogger<UsersService> logger
                         )
     {
         _httpClient = httpClient;
         _apiConfig = apiConfig.Value;
         _context = new MongoDbContext(mongoDbConfig);
+        _logger = logger;
     }
 
     ///  <summary>
@@ -51,13 +54,29 @@ public class UsersService : IUsersService
     ///  <summary>
     ///  Method is used to get all users
     ///  </summary>
+    /// <param name="cancellationToken"></param>
     ///  <returns>UserModel</returns>
-    public async Task<IEnumerable<UserModel>> GetUsers()
+    public async Task<IEnumerable<UserModel>> GetUsers(CancellationToken cancellationToken)
     {
-        var users = await _context
-            .UserCollections
-            .Find(new BsonDocument())
-            .ToListAsync();
+        IEnumerable<UserModel> users = null;
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            users = await _context
+                .UserCollections
+                .Find(new BsonDocument())
+                .ToListAsync(cancellationToken);
+        }
+        catch (OperationCanceledException e)
+        {
+            _logger.LogError($"Operation for GetUsers was cancelled { e.CancellationToken } - { e.Message} !!!");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception occured for GetUsers with message { ex.Message } !!!");
+            throw;
+        }
         return users;
     }
 

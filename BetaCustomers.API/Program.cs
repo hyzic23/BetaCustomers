@@ -27,6 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddHealthChecks();
+builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
 builder.Services.AddAuthentication(cfg => {
     cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

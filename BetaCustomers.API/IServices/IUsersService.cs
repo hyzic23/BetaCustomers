@@ -21,8 +21,9 @@ public interface IUsersService
     ///  <summary>
     ///  Method is used to get all users
     ///  </summary>
+    ///  <param name="cancellationToken"></param>
     ///  <returns>UserModel</returns>
-    Task<IEnumerable<UserModel>> GetUsers();
+    Task<IEnumerable<UserModel>> GetUsers(CancellationToken cancellationToken);
     
     ///  <summary>
     ///  Method is used to update user
