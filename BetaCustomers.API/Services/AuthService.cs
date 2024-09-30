@@ -31,9 +31,8 @@ public class AuthService : IAuthService
             }
             else
             {
-                // Todo : Change this to check for username and password
-                var user = await _usersService.CheckIfUserExist(request.Username);
-                if (user == null)
+                var user = await _usersService.ValidateUserCredential(request.Username, request.Password);
+                if (user == null || string.IsNullOrEmpty(user.Username))
                 {
                     _logger.LogInformation($"Username { request.Username } or Password is incorrect!");
                     var error = new { Error = "Unauthorized", Reason = "Invalid username or password" };
