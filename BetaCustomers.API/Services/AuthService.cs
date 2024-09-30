@@ -8,12 +8,15 @@ public class AuthService : IAuthService
 {
     private readonly IUsersService _usersService;
     private readonly ILoginService _loginService;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(IUsersService usersService, 
-                               ILoginService loginService)
+                       ILoginService loginService, 
+                       ILogger<AuthService> logger)
     {
         _usersService = usersService;
         _loginService = loginService;
+        _logger = logger;
     }
 
     public async Task<BaseResponse> AuthenticateUser(AuthenticateRequest request, CancellationToken cancellationToken = default)
@@ -23,6 +26,7 @@ public class AuthService : IAuthService
         {
             if (cancellationToken.IsCancellationRequested)
             {
+                _logger.LogInformation("CancellationToken was initiated");
                 cancellationToken.ThrowIfCancellationRequested();
             }
             else
@@ -31,6 +35,7 @@ public class AuthService : IAuthService
                 var user = await _usersService.CheckIfUserExist(request.Username);
                 if (user == null)
                 {
+                    _logger.LogInformation($"Username { request.Username } or Password is incorrect!");
                     var error = new { Error = "Unauthorized", Reason = "Invalid username or password" };
                     return new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO(error));
                 }
@@ -62,11 +67,12 @@ public class AuthService : IAuthService
         }
         catch (OperationCanceledException e)
         {
+            _logger.LogError($"CancellationToken Operation Exception!");
             throw;
         }
         catch (Exception ex)
         {
-            // ignored
+            _logger.LogError($"Exception is { ex.Message}");
             throw;
         }
     }
