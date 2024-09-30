@@ -4,6 +4,7 @@ using BetaCustomers.API.Services;
 using BetaCustomers.UnitTests.Fixtures;
 using BetaCustomers.UnitTests.Helpers;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
@@ -19,9 +20,11 @@ public class TestUsersService
         var expectedResponse = UsersFixture.GetTestUsers();
         var handlerMock = MockHttpMessageHandler<User>.SetupBasicGetResourceList(expectedResponse);
         var httpClient = new HttpClient(handlerMock.Object);
+        var mockLogger = new Mock<ILogger<UsersService>>();
         
         //IOptions<MongoDbConfig> mongoDbConfig
-        
+
+        ILogger<UsersService> logger = mockLogger.Object;
         var endpoint = "https://example.com/users";
         var config = Options.Create(
             new UsersApiConfig
@@ -35,7 +38,7 @@ public class TestUsersService
                 
             });
         
-        var sut = new UsersService(httpClient, config, mongoDbConfig);
+        var sut = new UsersService(httpClient, config, mongoDbConfig, logger);
         
         //Act
         await sut.GetAllUsers();
@@ -57,7 +60,10 @@ public class TestUsersService
         var expectedResponse = UsersFixture.GetTestUsers();
         var handlerMock = MockHttpMessageHandler<User>.SetupBasicGetResourceList(expectedResponse);
         var httpClient = new HttpClient(handlerMock.Object);
+        var mockLogger = new Mock<ILogger<UsersService>>();
         
+       
+        ILogger<UsersService> logger = mockLogger.Object;
         var endpoint = "https://example.com/users";
         var config = Options.Create(
             new UsersApiConfig
@@ -70,7 +76,7 @@ public class TestUsersService
                 
             });
         
-        var sut = new UsersService(httpClient, config, mongoDbConfig);
+        var sut = new UsersService(httpClient, config, mongoDbConfig, logger);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -85,6 +91,10 @@ public class TestUsersService
         //Arrange
         var handlerMock = MockHttpMessageHandler<User>.SetupReturn404();
         var httpClient = new HttpClient(handlerMock.Object);
+        var mockLogger = new Mock<ILogger<UsersService>>();
+        
+       
+        ILogger<UsersService> logger = mockLogger.Object;
         
         var endpoint = "https://example.com/users";
         var config = Options.Create(
@@ -98,7 +108,7 @@ public class TestUsersService
                 
             });
         
-        var sut = new UsersService(httpClient, config, mongoDbConfig);
+        var sut = new UsersService(httpClient, config, mongoDbConfig, logger);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -114,7 +124,10 @@ public class TestUsersService
         var expectedResponse = UsersFixture.GetTestUsers();
         var handlerMock = MockHttpMessageHandler<User>.SetupBasicGetResourceList(expectedResponse);
         var httpClient = new HttpClient(handlerMock.Object);
+        var mockLogger = new Mock<ILogger<UsersService>>();
         
+       
+        ILogger<UsersService> logger = mockLogger.Object;
         var endpoint = "https://example.com/users";
         var config = Options.Create(
             new UsersApiConfig
@@ -127,7 +140,7 @@ public class TestUsersService
                 
             });
         
-        var sut = new UsersService(httpClient, config, mongoDbConfig);
+        var sut = new UsersService(httpClient, config, mongoDbConfig, logger);
         
         //Act
         var result = await sut.GetAllUsers();
@@ -146,7 +159,10 @@ public class TestUsersService
             .SetupBasicGetResourceList(expectedResponse, endpoint);
         
         var httpClient = new HttpClient(handlerMock.Object);
-
+        var mockLogger = new Mock<ILogger<UsersService>>();
+        
+       
+        ILogger<UsersService> logger = mockLogger.Object;
         var config = Options.Create(
             new UsersApiConfig
             {
@@ -158,7 +174,7 @@ public class TestUsersService
                 
             });
         
-        var sut = new UsersService(httpClient, config, mongoDbConfig);
+        var sut = new UsersService(httpClient, config, mongoDbConfig, logger);
         
         //Act
         var result = await sut.GetAllUsers();
