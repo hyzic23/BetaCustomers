@@ -1,9 +1,12 @@
+using BetaCustomers.API.Config;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using BetaCustomers.API.Controllers;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.IServices;
 using BetaCustomers.UnitTests.Fixtures;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace BetaCustomers.UnitTests.Systems.Controllers;
@@ -15,11 +18,18 @@ public class TestUsersController
     {
         //Arrange
         var mockUsersService = new Mock<IUsersService>();
+        var cacheData = new Mock<IMemoryCache>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(UsersFixture.GetTestUsers());
+       
+        var config = Options.Create(
+            new UsersApiConfig
+            {
+               
+            });
         
-        var sut = new UsersController(mockUsersService.Object);
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
         
         //Act
         var result = (OkObjectResult)await sut.Get();
@@ -36,8 +46,13 @@ public class TestUsersController
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(new List<User>());
-        
-        var sut = new UsersController(mockUsersService.Object);
+        var cacheData = new Mock<IMemoryCache>();
+        var config = Options.Create(
+            new UsersApiConfig
+            {
+               
+            });
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
         
         //Act
         var result = await sut.Get();
@@ -54,8 +69,13 @@ public class TestUsersController
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(UsersFixture.GetTestUsers());
-        
-        var sut = new UsersController(mockUsersService.Object);
+        var cacheData = new Mock<IMemoryCache>();
+        var config = Options.Create(
+            new UsersApiConfig
+            {
+               
+            });
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
         
         //Act
         var result = await sut.Get();
@@ -74,8 +94,13 @@ public class TestUsersController
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(new List<User>());
-        
-        var sut = new UsersController(mockUsersService.Object);
+        var cacheData = new Mock<IMemoryCache>();
+        var config = Options.Create(
+            new UsersApiConfig
+            {
+               
+            });
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
         
         //Act
         var result = await sut.Get();
