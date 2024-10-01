@@ -62,9 +62,10 @@ public class UsersService : IUsersService
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
+            
             users = await _context
                 .UserCollections
-                .Find(new BsonDocument())
+                .Find(c => true)
                 .ToListAsync(cancellationToken);
         }
         catch (OperationCanceledException e)
