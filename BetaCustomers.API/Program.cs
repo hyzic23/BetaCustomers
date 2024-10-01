@@ -58,7 +58,7 @@ builder.Services.AddRateLimiter(options =>
             QueueLimit = 0
         }));
 });
-
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 app.MapHealthChecks("/health");

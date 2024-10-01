@@ -1,6 +1,7 @@
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BetaCustomers.API.Controllers;
 
@@ -9,10 +10,13 @@ namespace BetaCustomers.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUsersService _userService;
+    private readonly IMemoryCache _memoryCache;
 
-    public UsersController(IUsersService userService)
+    public UsersController(IUsersService userService, 
+                           IMemoryCache memoryCache)
     {
         _userService = userService;
+        _memoryCache = memoryCache;
     }
 
     [HttpGet(Name = "users-test")]
@@ -30,10 +34,20 @@ public class UsersController : ControllerBase
     [Route("users")]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var users = await _userService.GetUsers(cancellationToken);
-        if (users.Any())
+        var cacheData = _memoryCache.Get<IEnumerable<UserModel>>("users");
+        if (cacheData != null)
         {
-            return Ok(users);
+            return Ok(cacheData);
+        }
+
+        var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+         cacheData = await _userService.GetUsers(cancellationToken);
+         var userModels = cacheData.ToList();
+         _memoryCache.Set("users", userModels, expirationTime);
+        
+        if (userModels.Any())
+        {
+            return Ok(cacheData);
         }
         return NotFound();
     }
