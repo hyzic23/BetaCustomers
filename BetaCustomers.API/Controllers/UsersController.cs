@@ -113,6 +113,7 @@ public class UsersController : ControllerBase
             return NotFound();
         }
         var updatedUser = _userService.UpdateUser(userFound.Id, userFound);
+        _cacheService.RemoveData("users");
         return Ok(updatedUser);
     }
     
@@ -126,6 +127,7 @@ public class UsersController : ControllerBase
             return NotFound();
         }
         var deleteUser = _userService.DeleteUser(userFound.Id);
+        _cacheService.RemoveData("users");
         return Ok(deleteUser);
     }
 
