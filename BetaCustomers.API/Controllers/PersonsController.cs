@@ -58,7 +58,7 @@ public class PersonsController : ControllerBase
             FirstName = request.FirstName,
             LastName = request.LastName
         };
-        _personsService.CreatePerson(person);
+        await Task.FromResult(_personsService.CreatePerson(person));
         return Ok(200);
     }
 
@@ -66,7 +66,7 @@ public class PersonsController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> GetPersonById(int id)
     {
-        var person = _personsService.GetPersonById(id);
+        var person = await Task.FromResult(_personsService.GetPersonById(id));
         if (person == null)
         {
             return NotFound();
@@ -78,7 +78,7 @@ public class PersonsController : ControllerBase
     [Route("UpdatePerson")]
     public async Task<IActionResult> UpdatePerson(Person request)
     {
-        var person = _personsService.UpdatePerson(request);
+        var person = await Task.FromResult(_personsService.UpdatePerson(request));
         if (person == null) return NotFound();
         return Ok(person);
     }
