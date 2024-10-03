@@ -1,6 +1,8 @@
+using BetaCustomers.API.Config;
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BetaCustomers.API.Controllers;
 
@@ -9,20 +11,38 @@ namespace BetaCustomers.API.Controllers;
 public class PersonsController : ControllerBase
 {
     private readonly IPersonsService _personsService;
+    private readonly IMemoryCache _memoryCache;
+    private readonly UsersApiConfig _usersApiConfig;
 
-    public PersonsController(IPersonsService personsService)
+    public PersonsController(IPersonsService personsService, 
+                             IMemoryCache memoryCache, 
+                             UsersApiConfig usersApiConfig)
     {
         _personsService = personsService;
+        _memoryCache = memoryCache;
+        _usersApiConfig = usersApiConfig;
     }
 
     [HttpGet]
     [Route("GetAllPersons")]
     public async Task<IActionResult> Get()
     {
-        var results = _personsService.LoadAll();
-        if (results.Any())
+        var cachePersonData = _memoryCache.Get<IEnumerable<Person>>("persons");
+        if (cachePersonData != null)
         {
-            return Ok(results);
+            return Ok(cachePersonData);
+        }
+
+        var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
+        
+        var expirationTime = DateTimeOffset.Now.AddMinutes(cacheExpiryTime);
+        cachePersonData = await Task.FromResult(_personsService.LoadAll());
+        
+        //Set cache for persons
+        _memoryCache.Set("persons", cachePersonData, expirationTime);
+        if (cachePersonData.Any())
+        {
+            return Ok(cachePersonData);
         }
         return NoContent();
     }
