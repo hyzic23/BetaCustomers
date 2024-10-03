@@ -15,6 +15,7 @@ public class UsersController : ControllerBase
     private readonly IMemoryCache _memoryCache;
     private readonly UsersApiConfig _usersApiConfig;
     private readonly ICacheService _cacheService;
+    private readonly double _cacheExpiryTime;
 
     public UsersController(IUsersService userService, 
                            IMemoryCache memoryCache,
@@ -25,6 +26,7 @@ public class UsersController : ControllerBase
         _memoryCache = memoryCache;
         _usersApiConfig = options.Value;
         _cacheService = cacheService;
+        _cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
     }
 
     [HttpGet(Name = "users-test")]
@@ -49,9 +51,9 @@ public class UsersController : ControllerBase
             return Ok(cacheData);
         }
 
-        var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
+        //var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
         
-         var expirationTime = DateTimeOffset.Now.AddMinutes(cacheExpiryTime);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(_cacheExpiryTime);
          cacheData = await _userService.GetUsers(cancellationToken);
          var userModels = cacheData.ToList();
          
@@ -86,8 +88,7 @@ public class UsersController : ControllerBase
             return Ok(cacheData);
         }
         
-        var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
-        var expirationTime = DateTimeOffset.Now.AddMinutes(cacheExpiryTime);
+        var expirationTime = DateTimeOffset.Now.AddMinutes(_cacheExpiryTime);
         cacheData = await _userService.GetUserById(id);
         var userModels = cacheData;
          
