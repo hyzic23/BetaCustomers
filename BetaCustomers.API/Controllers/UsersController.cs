@@ -80,6 +80,20 @@ public class UsersController : ControllerBase
     [Route("get-user/{id}")]
     public async Task<IActionResult> Get(string id)
     {
+        var cacheData = _cacheService.GetData<UserModel>("users");
+        if (cacheData != null)
+        {
+            return Ok(cacheData);
+        }
+        
+        var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
+        var expirationTime = DateTimeOffset.Now.AddMinutes(cacheExpiryTime);
+        cacheData = await _userService.GetUserById(id);
+        var userModels = cacheData;
+         
+        //Set cache for users
+        _cacheService.SetData("users", userModels, expirationTime);
+        
         var user = await _userService.GetUserById(id);
         if (user == null)
         {
