@@ -17,6 +17,7 @@ public class TestUsersController
     public async Task Get_OnSuccess_ReturnsStatusCode200()
     {
         //Arrange
+        var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
         var cacheData = new Mock<IMemoryCache>();
         mockUsersService
@@ -29,7 +30,7 @@ public class TestUsersController
                
             });
         
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
         
         //Act
         var result = (OkObjectResult)await sut.Get();
@@ -42,6 +43,7 @@ public class TestUsersController
     public async Task Get_OnSuccess_InvokesUsersServiceExactlyOnce()
     {
         //Arrange
+        var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
@@ -52,7 +54,7 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
         
         //Act
         var result = await sut.Get();
@@ -65,6 +67,7 @@ public class TestUsersController
     public async Task Get_OnSuccess_ReturnsListOfUsers()
     {
         //Arrange
+        var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
@@ -75,7 +78,7 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
         
         //Act
         var result = await sut.Get();
@@ -90,6 +93,7 @@ public class TestUsersController
     public async Task Get_OnNoUsersFound_Returns404()
     {
         //Arrange
+        var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
@@ -100,7 +104,7 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config);
+        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
         
         //Act
         var result = await sut.Get();

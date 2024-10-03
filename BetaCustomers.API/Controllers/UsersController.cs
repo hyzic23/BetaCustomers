@@ -14,14 +14,17 @@ public class UsersController : ControllerBase
     private readonly IUsersService _userService;
     private readonly IMemoryCache _memoryCache;
     private readonly UsersApiConfig _usersApiConfig;
+    private readonly ICacheService _cacheService;
 
     public UsersController(IUsersService userService, 
                            IMemoryCache memoryCache,
-                           IOptions<UsersApiConfig> options)
+                           IOptions<UsersApiConfig> options,
+                           ICacheService cacheService)
     {
         _userService = userService;
         _memoryCache = memoryCache;
         _usersApiConfig = options.Value;
+        _cacheService = cacheService;
     }
 
     [HttpGet(Name = "users-test")]
@@ -39,7 +42,8 @@ public class UsersController : ControllerBase
     [Route("users")]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
-        var cacheData = _memoryCache.Get<IEnumerable<UserModel>>("users");
+        //var cacheData = _memoryCache.Get<IEnumerable<UserModel>>("users");
+        var cacheData = _cacheService.GetData<IEnumerable<UserModel>>("users");
         if (cacheData != null)
         {
             return Ok(cacheData);
@@ -52,7 +56,8 @@ public class UsersController : ControllerBase
          var userModels = cacheData.ToList();
          
          //Set cache for users
-         _memoryCache.Set("users", userModels, expirationTime);
+         //_memoryCache.Set("users", userModels, expirationTime);
+         _cacheService.SetData("users", userModels, expirationTime);
         
         if (userModels.Any())
         {

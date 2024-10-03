@@ -94,4 +94,5 @@ void ConfigureServices(IServiceCollection services)
     services.AddTransient<IPlaylistService, PlaylistService>();
     services.AddTransient<ILoginService, LoginService>();
     services.AddTransient<IAuthService, AuthService>();
+    services.AddScoped<ICacheService, CacheService>();
 }
