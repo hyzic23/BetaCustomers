@@ -6,6 +6,8 @@ using BetaCustomers.API.Middleware;
 using BetaCustomers.API.Middlewares;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
+using BetaCustomers.API.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -95,4 +97,5 @@ void ConfigureServices(IServiceCollection services)
     services.AddTransient<ILoginService, LoginService>();
     services.AddTransient<IAuthService, AuthService>();
     services.AddScoped<ICacheService, CacheService>();
+    services.AddScoped<IValidator<UserModel>, UsersValidator>();
 }

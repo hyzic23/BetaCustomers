@@ -1,6 +1,7 @@
 using BetaCustomers.API.Config;
 using BetaCustomers.API.IServices;
 using BetaCustomers.API.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -16,17 +17,20 @@ public class UsersController : ControllerBase
     private readonly UsersApiConfig _usersApiConfig;
     private readonly ICacheService _cacheService;
     private readonly double _cacheExpiryTime;
+    private readonly IValidator<UserModel> _validator;
 
     public UsersController(IUsersService userService, 
                            IMemoryCache memoryCache,
                            IOptions<UsersApiConfig> options,
-                           ICacheService cacheService)
+                           ICacheService cacheService, 
+                           IValidator<UserModel> validator)
     {
         _userService = userService;
         _memoryCache = memoryCache;
         _usersApiConfig = options.Value;
         _cacheService = cacheService;
         _cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
+        _validator = validator;
     }
 
     [HttpGet(Name = "users-test")]
@@ -72,8 +76,12 @@ public class UsersController : ControllerBase
     [Route("create")]
     public async Task<IActionResult> CreateUser(UserModel user)
     {
-        // Todo
-        // Add user validations
+        var validationResult = await _validator.ValidateAsync(user);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult);
+        }
+
         var users = await _userService.CreateUser(user);
         return Ok(users);
     }
