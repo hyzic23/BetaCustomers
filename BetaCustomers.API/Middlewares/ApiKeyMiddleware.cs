@@ -1,4 +1,5 @@
 using BetaCustomers.API.Config;
+using BetaCustomers.API.Models;
 using Microsoft.Extensions.Options;
 
 namespace BetaCustomers.API.Middlewares;
@@ -16,35 +17,36 @@ public class ApiKeyMiddleware
         _usersApiConfig = options.Value;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public Task InvokeAsync(HttpContext context)
     {
         // Skip API Key validation for token generation endpoint
         var path = context.Request.Path.Value;
         if (path.StartsWith("/api/auth/authenticate"))
         {
-            await _next(context);
-            return;
+            return _next(context);
         }
 
         // Check if the request contains the API Key in the header
         if (!context.Request.Headers.TryGetValue(API_KEY_NAME, out var apiKey))
         {
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("API Key is missing.");
-            return;
+            var response = new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO("Unauthorized"));
+            context.Response.StatusCode = response.StatusCode;
+            context.Response.ContentType = "application/json";
+            return context.Response.WriteAsJsonAsync(response);
         }
         
         // Validate the API key against a configured value 
         var extractApiKey = _usersApiConfig.ApiKey;
         if (!apiKey.Equals(extractApiKey))
         {
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("API Key is missing.");
-            return;
+            var response = new BaseResponse(StatusCodes.Status401Unauthorized, new MessageDTO("Unauthorized"));
+            context.Response.StatusCode = response.StatusCode;
+            context.Response.ContentType = "application/json";
+            return context.Response.WriteAsJsonAsync(response);
         }
         
         // If the API key is valid, proceed to the next middleware
-        await _next(context);
+        return _next(context);
     }
 
 }
