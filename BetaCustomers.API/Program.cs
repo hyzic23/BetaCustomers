@@ -6,6 +6,7 @@ using BetaCustomers.API.Middleware;
 using BetaCustomers.API.Middlewares;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.Services;
+using BetaCustomers.API.Utils;
 using BetaCustomers.API.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -73,6 +74,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseJwtMiddleware();
+app.UseApiMiddleware();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<RequestLoggerMiddleware>();
 app.UseAuthentication();
@@ -90,6 +92,7 @@ app.Run();
 void ConfigureServices(IServiceCollection services)
 {
     services.Configure<UsersApiConfig>(builder.Configuration.GetSection("UsersApiOptions"));
+    services.AddHttpClient<ApiService>();
     services.AddTransient<IUsersService, UsersService>();
     services.AddHttpClient<IUsersService, UsersService>();
     services.AddTransient<IPersonsService, PersonsService>();
