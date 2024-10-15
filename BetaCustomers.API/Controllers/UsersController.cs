@@ -54,10 +54,8 @@ public class UsersController : ControllerBase
         {
             return Ok(cacheData);
         }
-
-        //var cacheExpiryTime = double.Parse(_usersApiConfig.CachingExpiryTimeInMinutes);
         
-         var expirationTime = DateTimeOffset.Now.AddMinutes(_cacheExpiryTime);
+        var expirationTime = DateTimeOffset.Now.AddMinutes(_cacheExpiryTime);
          cacheData = await _userService.GetUsers(cancellationToken);
          var userModels = cacheData.ToList();
          

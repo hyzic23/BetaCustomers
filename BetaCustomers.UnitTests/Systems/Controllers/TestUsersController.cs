@@ -5,6 +5,7 @@ using BetaCustomers.API.Controllers;
 using BetaCustomers.API.Models;
 using BetaCustomers.API.IServices;
 using BetaCustomers.UnitTests.Fixtures;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -20,6 +21,8 @@ public class TestUsersController
         var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
         var cacheData = new Mock<IMemoryCache>();
+        var validator = new Mock<IValidator<UserModel>>();
+        
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(UsersFixture.GetTestUsers());
@@ -30,7 +33,11 @@ public class TestUsersController
                
             });
         
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
+        var sut = new UsersController(mockUsersService.Object, 
+                                      cacheData.Object, 
+                                      config, 
+                                      mockCacheService.Object, 
+                                      validator.Object);
         
         //Act
         var result = (OkObjectResult)await sut.Get();
@@ -45,6 +52,7 @@ public class TestUsersController
         //Arrange
         var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
+        var validator = new Mock<IValidator<UserModel>>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(new List<User>());
@@ -54,7 +62,11 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
+        var sut = new UsersController(mockUsersService.Object, 
+                                      cacheData.Object, 
+                                      config, 
+                                      mockCacheService.Object, 
+                                      validator.Object);
         
         //Act
         var result = await sut.Get();
@@ -69,6 +81,7 @@ public class TestUsersController
         //Arrange
         var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
+        var validator = new Mock<IValidator<UserModel>>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(UsersFixture.GetTestUsers());
@@ -78,7 +91,11 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
+        var sut = new UsersController(mockUsersService.Object, 
+                                      cacheData.Object, 
+                                      config, 
+                                      mockCacheService.Object, 
+                                      validator.Object);
         
         //Act
         var result = await sut.Get();
@@ -95,6 +112,7 @@ public class TestUsersController
         //Arrange
         var mockCacheService = new Mock<ICacheService>();
         var mockUsersService = new Mock<IUsersService>();
+        var validator = new Mock<IValidator<UserModel>>();
         mockUsersService
             .Setup(service => service.GetAllUsers())
             .ReturnsAsync(new List<User>());
@@ -104,7 +122,11 @@ public class TestUsersController
             {
                
             });
-        var sut = new UsersController(mockUsersService.Object, cacheData.Object, config, mockCacheService.Object);
+        var sut = new UsersController(mockUsersService.Object, 
+                                      cacheData.Object, 
+                                      config, 
+                                      mockCacheService.Object, 
+                                      validator.Object);
         
         //Act
         var result = await sut.Get();
