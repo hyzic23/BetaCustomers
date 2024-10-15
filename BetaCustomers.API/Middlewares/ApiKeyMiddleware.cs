@@ -18,6 +18,14 @@ public class ApiKeyMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Skip API Key validation for token generation endpoint
+        var path = context.Request.Path.Value;
+        if (path.StartsWith("/api/Auth/authenticate"))
+        {
+            await _next(context);
+            return;
+        }
+
         // Check if the request contains the API Key in the header
         if (!context.Request.Headers.TryGetValue(API_KEY_NAME, out var apiKey))
         {
