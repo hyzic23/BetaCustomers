@@ -58,7 +58,7 @@ public class JwtMiddleware
     {
         var enabledRoutes = new List<string>
         {
-            "/api/Auth/authenticate",
+            "/api/auth/authenticate",
             "/api/Users/create"
         };
 

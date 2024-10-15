@@ -20,7 +20,7 @@ public class ApiKeyMiddleware
     {
         // Skip API Key validation for token generation endpoint
         var path = context.Request.Path.Value;
-        if (path.StartsWith("/api/Auth/authenticate"))
+        if (path.StartsWith("/api/auth/authenticate"))
         {
             await _next(context);
             return;

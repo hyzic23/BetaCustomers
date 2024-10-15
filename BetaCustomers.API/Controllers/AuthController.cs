@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BetaCustomers.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
+//[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
