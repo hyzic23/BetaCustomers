@@ -14,12 +14,22 @@ public class LoginService : ILoginService
         _context = new MongoDbContext(mongoDbConfig);
     }
 
+    ///  <summary>
+    ///  Method is used to create Login Details 
+    ///  </summary>
+    ///  <param name="loginDetail"></param>
+    ///  <returns>LoginDetail</returns>
     public async Task<LoginDetail> CreateLoginDetails(LoginDetail loginDetail)
     {
         await _context.LoginDetailCollections.InsertOneAsync(loginDetail);
         return loginDetail;
     }
 
+    ///  <summary>
+    ///  Method is used to get Login Details using username
+    ///  </summary>
+    ///  <param name="username"></param>
+    ///  <returns>LoginDetail</returns>
     public async Task<LoginDetail> GetLoginDetails(string username)
     {
         var loginDetails = await _context
@@ -29,6 +39,12 @@ public class LoginService : ILoginService
         return loginDetails;
     }
 
+    ///  <summary>
+    ///  Method is used to update Login Details using id and loginDetails
+    ///  </summary>
+    ///  <param name="id"></param>
+    ///  <param name="loginDetail"></param>
+    ///  <returns>ReplaceOneResult</returns>
     public async Task<ReplaceOneResult> UpdateLoginDetails(string id, LoginDetail loginDetail)
     {
         return await _context.LoginDetailCollections

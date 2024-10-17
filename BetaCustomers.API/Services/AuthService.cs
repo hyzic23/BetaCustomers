@@ -19,6 +19,12 @@ public class AuthService : IAuthService
         _logger = logger;
     }
 
+    ///  <summary>
+    ///  Method is used to Authenticate request 
+    ///  </summary>
+    ///  <param name="request"></param>
+    ///  <param name="cancellationToken"></param>
+    ///  <returns>BaseResponse</returns>
     public async Task<BaseResponse> AuthenticateUser(AuthenticateRequest request, CancellationToken cancellationToken = default)
     {
         LoginDetail loginDetails = null;
